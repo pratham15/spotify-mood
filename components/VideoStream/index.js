@@ -3,15 +3,18 @@ import { Prediction } from "../../lib/GestureDetection/Prediction";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@chakra-ui/react";
 import detectPlayerGesture from "./detectGesture";
+import { useAtomValue } from "jotai";
+import { spotifyPlayerAtom } from "../../atoms/spotifyPlayerAtom";
 
 // setyp & initialization
 // -----------------------------------------------------------------------------
-export default function VideoStream(player) {
+export default function VideoStream() {
   // store a reference to the player video
   const [mediaStream, setMediaStream] = useState(null);
   const [playerVideo, setPlayerVideo] = useState(undefined);
   const videoRef = useRef(null);
 
+  const player = useAtomValue(spotifyPlayerAtom);
   useEffect(() => {
     async function setupWebcamVideo() {
       if (!mediaStream) {
@@ -58,8 +61,13 @@ export default function VideoStream(player) {
     }
     if (mediaStream) onInit();
   }, [mediaStream]);
-  const detGes = () => {
-    console.log(detectPlayerGesture(150, playerVideo, player));
+
+  const detGes = async () => {
+    const gesture = await detectPlayerGesture(150, playerVideo, player);
+    console.log(gesture);
+    if (gesture == "scissors") {
+      player.nextTrack();
+    }
   };
   return (
     <>

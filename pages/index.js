@@ -1,9 +1,9 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { songInfo } from "../atoms/songInfo";
+import { spotifyPlayerAtom } from "../atoms/spotifyPlayerAtom";
 import Sidebar from "../components/sidebar";
 import VideoStream from "../components/VideoStream";
 import useSpotify from "../hooks/useSpotify";
@@ -20,9 +20,8 @@ export default function Home() {
   const [is_active, setActive] = useState(false);
   const [current_track, setTrack] = useState(track);
   //const [player, setPlayer] = useState();
-
+  const [player, setPlayer] = useAtom(spotifyPlayerAtom);
   //const player = useSpotify();
-  const [player, setPlayer] = useRecoilState(songInfo);
   useEffect(() => {
     window.onSpotifyWebPlaybackSDKReady = () => {
       if (session != null && session != undefined) {
