@@ -9,9 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.0.0",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@heroicons/react": "^1.0.6",
+    "@mediapipe/hands": "^0.4.1646424915",
+    "@tensorflow-models/hand-pose-detection": "^2.0.0",
+    "@tensorflow-models/handpose": "^0.0.7",
+    "@tensorflow/tfjs-backend-webgl": "^3.17.0",
+    "@tensorflow/tfjs-converter": "^3.17.0",
+    "@tensorflow/tfjs-core": "^3.17.0",
+    "dotenv": "^16.0.1",
+    "fingerpose": "^0.1.0",
+    "framer-motion": "^6",
     "next": "12.1.6",
+    "next-auth": "^4.3.4",
+    "phosphor-react": "^1.4.1",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-icons": "^4.3.1",
+    "recoil": "^0.7.3-alpha.2",
+    "request": "^2.88.2",
+    "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
     "eslint": "8.15.0",
