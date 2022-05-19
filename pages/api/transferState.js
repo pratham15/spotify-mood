@@ -1,14 +1,13 @@
+import { useRouter } from "next/router";
 import getActiveDevices from "../../lib/spotify/get-active-devices";
 
 export default async function transferState(req, res) {
   const token = req.headers.authorization.split(" ")[1];
-  const activeDevices = await getActiveDevices(token);
-  const data = activeDevices.devices;
-  const id = data.filter((el) => {
-    return el.name.endsWith("SDK");
-  });
+  const {
+    query: { device_id },
+  } = req;
 
-  console.log("Transferring State to user!", id);
+  console.log("Transferring State to user!", device_id);
 
   // PUT REQUEST TO TRANSFER PLAYBACK
 
@@ -19,7 +18,7 @@ export default async function transferState(req, res) {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      device_ids: [id[0].id],
+      device_ids: [device_id],
       play: true,
     }),
   });

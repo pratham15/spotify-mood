@@ -1,10 +1,14 @@
 // import styles
 import { Prediction } from "../../lib/GestureDetection/Prediction";
 import { useEffect, useState, useRef } from "react";
-import { Button } from "@chakra-ui/react";
+import { AspectRatio, Button } from "@chakra-ui/react";
 import detectPlayerGesture from "./detectGesture";
-import { useAtomValue } from "jotai";
-import { spotifyPlayerAtom } from "../../atoms/spotifyPlayerAtom";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  gestureModelAtom,
+  spotifyPlayerAtom,
+} from "../../atoms/spotifyPlayerAtom";
+import { GestureHandler } from "./GestureHandler";
 
 // setyp & initialization
 // -----------------------------------------------------------------------------
@@ -12,6 +16,8 @@ export default function VideoStream() {
   // store a reference to the player video
   const [mediaStream, setMediaStream] = useState(null);
   const [playerVideo, setPlayerVideo] = useState(undefined);
+  const [isLoaded, setIsLoading] = useAtom(gestureModelAtom);
+  const playerReady = useAtomValue(spotifyPlayerAtom);
   const videoRef = useRef(null);
 
   const player = useAtomValue(spotifyPlayerAtom);
@@ -54,7 +60,7 @@ export default function VideoStream() {
         // result[0] will contain the initialized video element
         setPlayerVideo(result[0]);
         console.log("Initialization finished");
-
+        setIsLoading(true);
         // game is ready
         //waitForPlayer()
       });
@@ -62,25 +68,31 @@ export default function VideoStream() {
     if (mediaStream) onInit();
   }, [mediaStream]);
 
-  const detGes = async () => {
-    const gesture = await detectPlayerGesture(150, playerVideo, player);
-    console.log(gesture);
-    if (gesture == "scissors") {
-      player.nextTrack();
+  useEffect(() => {
+    if (isLoaded && spotifyPlayerAtom) {
+      const timer = setInterval(() => {
+        console.log("Setting Interval!");
+        detect();
+      }, 1500);
+      return () => clearInterval(timer);
     }
+  });
+
+  const detect = async () => {
+    const gesture = await Prediction.predictGesture(playerVideo, 9);
+    //const gesture = await detectPlayerGesture(150, playerVideo, player);
+    console.log("Gesture detected!", gesture);
+    GestureHandler(player, gesture);
   };
   return (
     <>
-      <div className="w-full h-full relative z-0">
-        <video
-          className="h-full w-full mx-auto"
-          id="video"
-          ref={videoRef}
-          autoPlay
-          muted
-        />
-      </div>
-      <Button onClick={detGes}>Detect!</Button>
+      <video
+        className="h-full w-full mx-auto"
+        id="video"
+        ref={videoRef}
+        autoPlay
+        muted
+      />
     </>
   );
 }

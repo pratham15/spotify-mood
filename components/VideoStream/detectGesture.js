@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useSpotify from "../../hooks/useSpotify";
 import Home from "../../pages";
 import { Prediction } from "../../lib/GestureDetection/Prediction";
 import { useAtom } from "jotai";
