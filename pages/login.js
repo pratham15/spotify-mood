@@ -5,12 +5,11 @@ export default function Login({ providers }) {
   return (
     <Center minHeight="100vh" bg="black" minWidth="100vw">
       <Button
-        color="white"
         variant="outline"
+        bg="#1DB954"
+        color="#191414"
         _hover={{}}
         onClick={() => signIn(providers.spotify.id, { callbackUrl: "/" })}
-        //onClick={fn}
-        // href="/api/auth/login"
       >
         Login with {providers.spotify.name}
       </Button>
